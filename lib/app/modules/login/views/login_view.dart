@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:myapp/app/controllers/auth_controller.dart';
+import 'package:myapp/app/routes/app_pages.dart';
 
 import '../controllers/login_controller.dart';
 
@@ -57,7 +58,9 @@ class LoginView extends GetView<LoginController> {
               alignment: Alignment.centerRight,
               child: TextButton(
                 child: Text("Reset Password"),
-                onPressed: () {},
+                onPressed: () {
+                  Get.offAllNamed(Routes.RESET_PASSWORD);
+                },
               ),
             ),
             SizedBox(
@@ -68,7 +71,9 @@ class LoginView extends GetView<LoginController> {
               children: [
                 Text("Belum Punya Akun ?"),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.offAllNamed(Routes.SIGNUP);
+                  },
                   child: Text("Daftar Disini"),
                 ),
               ],

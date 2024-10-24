@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myapp/app/controllers/auth_controller.dart';
 
-import 'app/routes/app_pages.dart';
-
-// Import the generated file
+import 'app/routes/app_pages.dart'; // Import the generated file
 import 'firebase_options.dart';
 
 void main() async {
@@ -29,7 +27,10 @@ class MyApp extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.active) {
           return GetMaterialApp(
             title: "Application",
-            initialRoute: snapshot.data != null ? Routes.HOME : Routes.LOGIN,
+            initialRoute:
+                snapshot.data != null && snapshot.data!.emailVerified == true
+                    ? Routes.HOME
+                    : Routes.LOGIN,
             getPages: AppPages.routes,
           );
         }
