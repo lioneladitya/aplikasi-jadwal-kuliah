@@ -43,7 +43,7 @@ class ResetPasswordView extends GetView<ResetPasswordController> {
             ),
             ElevatedButton(
               onPressed: () {
-                cAuth.resetPassword();
+                cAuth.resetPassword(controller.cEmail.text);
               },
               child: Text("Reset Password"),
               style: ElevatedButton.styleFrom(
