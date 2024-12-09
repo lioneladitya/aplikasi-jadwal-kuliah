@@ -1,101 +1,116 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'mahasiswa_add_view.dart'; // Import halaman untuk menambah dan mengedit data
 
 class MahasiswaView extends StatelessWidget {
+  final String type;
+
+  MahasiswaView({required this.type});
+
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('mata_kuliah').snapshots(),
-      builder: (context, snapshot) {
-        // Menunggu data yang sedang dimuat
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        }
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Daftar $type'),
+      ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection(type).snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
 
-        // Menampilkan error jika ada
-        if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        }
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return Center(child: Text('Tidak ada data $type.'));
+          }
 
-        final data = snapshot.data?.docs ?? [];
+          var documents = snapshot.data!.docs;
 
-        // Menampilkan data dalam bentuk ListView
-        return ListView.builder(
-          itemCount: data.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              title: Text(
-                data[index]['mata_kuliah'],
-                style: TextStyle(fontSize: 16), // Ukuran font untuk mata kuliah
-              ),
-              subtitle: Text(
-                data[index]['hari'],
-                style: TextStyle(
-                  fontSize: 20, // Ukuran font untuk hari lebih besar
-                  color: Colors.yellow, // Warna kuning untuk hari
+          return ListView.builder(
+            itemCount: documents.length,
+            itemBuilder: (context, index) {
+              var doc = documents[index];
+              var mataKuliah = doc['mata_kuliah'];
+              var hari = doc['hari'];
+              var tugas = doc['tugas'] ?? '';
+              var materi = doc['materi'] ?? '';
+              var deadline = doc['deadline'] ?? '';
+
+              return Card(
+                margin: EdgeInsets.all(8.0),
+                child: ListTile(
+                  title: Text('$mataKuliah - $hari'),
+                  subtitle: Text('Tugas: $tugas\nMateri: $materi\nDeadline: $deadline'),
+                  onTap: () {
+                    // Navigasi ke halaman edit
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MahasiswaAddView(
+                          type: type,
+                          docId: doc.id,
+                        ),
+                      ),
+                    );
+                  },
+                  trailing: IconButton(
+                    icon: Icon(Icons.delete, color: Colors.red),
+                    onPressed: () async {
+                      // Konfirmasi penghapusan data
+                      bool? confirm = await showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text('Hapus $type'),
+                          content: Text('Apakah Anda yakin ingin menghapus $mataKuliah?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, false),
+                              child: Text('Batal'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context, true);
+                                // Menghapus data dari Firestore
+                                FirebaseFirestore.instance
+                                    .collection(type)
+                                    .doc(doc.id)
+                                    .delete();
+                              },
+                              child: Text('Hapus'),
+                            ),
+                          ],
+                        ),
+                      );
+
+                      // Jika user mengonfirmasi, maka hapus data
+                      if (confirm == true) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('$type berhasil dihapus')),
+                        );
+                      }
+                    },
+                  ),
                 ),
+              );
+            },
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Navigasi ke halaman tambah data
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MahasiswaAddView(
+                type: type,
               ),
-              trailing: IconButton(
-                icon: Icon(Icons.delete, color: Colors.red),
-                onPressed: () async {
-                  // Tampilkan dialog konfirmasi hapus
-                  bool confirmDelete = await _confirmDelete(context);
-                  if (confirmDelete) {
-                    // Proses penghapusan data dari Firestore
-                    await _deleteData(data[index].id, context);
-                  }
-                },
-              ),
-            );
-          },
-        );
-      },
+            ),
+          );
+        },
+        child: Icon(Icons.add),
+        tooltip: 'Tambah $type',
+      ),
     );
-  }
-
-  // Fungsi untuk menampilkan dialog konfirmasi hapus
-  Future<bool> _confirmDelete(BuildContext context) async {
-    return await showDialog<bool>(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text('Konfirmasi Hapus'),
-            content: Text('Apakah Anda yakin ingin menghapus data ini?'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context)
-                      .pop(false); // Mengembalikan false jika batal
-                },
-                child: Text('Batal'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context)
-                      .pop(true); // Mengembalikan true jika hapus
-                },
-                child: Text('Hapus'),
-              ),
-            ],
-          ),
-        ) ??
-        false; // Jika dialog dibatalkan, return false
-  }
-
-  // Fungsi untuk menghapus data dari Firestore
-  Future<void> _deleteData(String docId, BuildContext context) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('mata_kuliah')
-          .doc(docId)
-          .delete();
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Data berhasil dihapus')),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal menghapus data')),
-      );
-    }
   }
 }

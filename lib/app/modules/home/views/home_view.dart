@@ -32,25 +32,23 @@ class _DashboardAdminState extends State<DashboardAdmin> {
   List<Map> _fragment = [
     {
       'title': 'MATA KULIAH',
-      'view': MahasiswaView(), // Tampilan untuk Mata Kuliah
-      'add': () => MahasiswaAddView(), // Tambah Data Mata Kuliah
+      'view': (context) => MahasiswaView(type: 'mata_kuliah'), // Tambahkan parameter 'type'
+      'add': () => MahasiswaAddView(type: 'mata_kuliah'), // Tambahkan parameter 'type'
     },
     {
       'title': 'Daftar Tugas',
-      'view':
-          MahasiswaView(), // Bisa diganti dengan tampilan daftar tugas lainnya
-      'add': () => MahasiswaAddView(), // Menambah tugas baru
+      'view': (context) => MahasiswaView(type: 'tugas'), // Menampilkan data tugas
+      'add': () => MahasiswaAddView(type: 'tugas'), // Menambahkan data tugas
     },
     {
       'title': 'Pencatatan Materi',
-      'view':
-          MahasiswaView(), // Ganti dengan tampilan pencatatan materi jika ada
-      'add': () => MahasiswaAddView(),
+      'view': (context) => MahasiswaView(type: 'materi'), // Menampilkan data materi
+      'add': () => MahasiswaAddView(type: 'materi'), // Menambahkan data materi
     },
     {
       'title': 'Daftar Deadline',
-      'view': MahasiswaView(), // Ganti dengan tampilan daftar deadline
-      'add': () => MahasiswaAddView(),
+      'view': (context) => MahasiswaView(type: 'deadline'), // Menampilkan data deadline
+      'add': () => MahasiswaAddView(type: 'deadline'), // Menambahkan data deadline
     },
   ];
 
@@ -69,7 +67,7 @@ class _DashboardAdminState extends State<DashboardAdmin> {
           ),
         ],
       ),
-      body: _fragment[_index]['view'],
+      body: _fragment[_index]['view'](context), // Menyesuaikan dengan fungsi
     );
   }
 

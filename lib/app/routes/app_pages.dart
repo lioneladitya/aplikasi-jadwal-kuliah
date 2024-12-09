@@ -38,9 +38,10 @@ class AppPages {
       page: () => ResetPasswordView(),
       binding: ResetPasswordBinding(),
     ),
+    // Memberikan parameter 'type' saat memanggil MahasiswaView
     GetPage(
       name: _Paths.MAHASISWA,
-      page: () => MahasiswaView(),
+      page: () => MahasiswaView(type: 'default'),  // Pastikan memberikan parameter
       binding: MahasiswaBinding(),
     ),
   ];
