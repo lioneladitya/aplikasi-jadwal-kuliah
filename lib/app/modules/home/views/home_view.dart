@@ -8,9 +8,7 @@ import 'package:myapp/app/modules/mahasiswa/views/mahasiswa_view.dart';
 
 import '../controllers/home_controller.dart';
 
-class HomeView extends GetView<HomeController> {
-  final cAuth = Get.find<AuthController>();
-
+class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DashboardAdmin();
@@ -25,140 +23,150 @@ class DashboardAdmin extends StatefulWidget {
 }
 
 class _DashboardAdminState extends State<DashboardAdmin> {
-  final cAuth = Get.find<AuthController>();
-  int _index = 0;
-
-  // Daftar tampilan yang akan ditampilkan berdasarkan tab
-  List<Map> _fragment = [
+  final List<Map> _fragment = [
     {
-      'title': 'MATA KULIAH',
-      'view': (context) => MahasiswaView(type: 'mata_kuliah'), // Tambahkan parameter 'type'
-      'add': () => MahasiswaAddView(type: 'mata_kuliah'), // Tambahkan parameter 'type'
+      'title': 'Mata Kuliah',
+      'view': (context) => MahasiswaView(type: 'mata_kuliah'), // Replace with your MahasiswaView
+      'add': () => MahasiswaAddView(type: 'mata_kuliah'), // Replace with your MahasiswaAddView
     },
     {
       'title': 'Daftar Tugas',
-      'view': (context) => MahasiswaView(type: 'tugas'), // Menampilkan data tugas
-      'add': () => MahasiswaAddView(type: 'tugas'), // Menambahkan data tugas
+      'view': (context) => MahasiswaView(type: 'tugas'), // Replace with your MahasiswaView
+      'add': () => MahasiswaAddView(type: 'tugas'), // Replace with your MahasiswaAddView
     },
     {
       'title': 'Pencatatan Materi',
-      'view': (context) => MahasiswaView(type: 'materi'), // Menampilkan data materi
-      'add': () => MahasiswaAddView(type: 'materi'), // Menambahkan data materi
+      'view': (context) => MahasiswaView(type: 'materi'), // Replace with your MahasiswaView
+      'add': () => MahasiswaAddView(type: 'materi'), // Replace with your MahasiswaAddView
     },
     {
       'title': 'Daftar Deadline',
-      'view': (context) => MahasiswaView(type: 'deadline'), // Menampilkan data deadline
-      'add': () => MahasiswaAddView(type: 'deadline'), // Menambahkan data deadline
+      'view': (context) => MahasiswaView(type: 'deadline'), // Replace with your MahasiswaView
+      'add': () => MahasiswaAddView(type: 'deadline'), // Replace with your MahasiswaAddView
     },
   ];
+
+  int _index = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: drawer(),
+      drawer: _buildDrawer(),
       appBar: AppBar(
-        backgroundColor: Colors.teal,
-        titleSpacing: 0,
-        title: Text(_fragment[_index]['title']),
+        elevation: 0,
+        backgroundColor: Colors.teal.shade700,
+        title: Text(
+          _fragment[_index]['title'],
+          style: TextStyle(fontWeight: FontWeight.w600),
+        ),
         actions: [
           IconButton(
-            onPressed: () => Get.to(_fragment[_index]['add']),
-            icon: Icon(Icons.add_circle_outline),
+            tooltip: "Add New",
+            onPressed: () => Get.to(_fragment[_index]['add']()),
+            icon: Icon(Icons.add_circle, size: 28),
           ),
         ],
       ),
-      body: _fragment[_index]['view'](context), // Menyesuaikan dengan fungsi
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.teal.shade100, Colors.teal.shade50],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: _fragment[_index]['view'](context),
+        ),
+      ),
     );
   }
 
-  Widget drawer() {
+  Widget _buildDrawer() {
     return Drawer(
-      child: ListView(
-        children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.teal,
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.teal.shade700, Colors.teal.shade400],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
+        child: ListView(
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.teal.shade900, Colors.teal.shade700],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 40,
+                    backgroundColor: Colors.teal.shade300,
+                    child: Icon(
+                      Icons.account_circle,
+                      size: 50,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(width: 16),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Geels No Counter", 
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        'Admin',
+                        style: TextStyle(fontSize: 14, color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  Icons.account_circle,
-                  size: 80,
-                  color: Colors.white,
+            ...List.generate(
+              _fragment.length,
+              (i) => ListTile(
+                onTap: () {
+                  setState(() => _index = i);
+                  Get.back();
+                },
+                leading: Icon(Icons.dashboard, color: Colors.white),
+                title: Text(
+                  _fragment[i]['title'],
+                  style: TextStyle(color: Colors.white),
                 ),
-                Text(
-                  "Aldion Ihza Pratama",
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
-                ),
-                SizedBox(height: 2),
-                Text(
-                  'Admin',
-                  style: TextStyle(fontSize: 12, color: Colors.white),
-                ),
-              ],
+                trailing: Icon(Icons.navigate_next, color: Colors.white),
+              ),
             ),
-          ),
-          ListTile(
-            onTap: () {
-              setState(() => _index = 0);
-              Get.back();
-            },
-            leading: Icon(Icons.dashboard),
-            title: Text('Mata Kuliah'),
-            trailing: Icon(Icons.navigate_next),
-            iconColor: Colors.teal,
-            textColor: Colors.teal,
-          ),
-          ListTile(
-            onTap: () {
-              setState(() => _index = 1);
-              Get.back();
-            },
-            leading: Icon(Icons.people),
-            title: Text('Daftar Tugas'),
-            trailing: Icon(Icons.navigate_next),
-            iconColor: Colors.teal,
-            textColor: Colors.teal,
-          ),
-          ListTile(
-            onTap: () {
-              setState(() => _index = 2);
-              Get.back();
-            },
-            leading: Icon(Icons.people),
-            title: Text('Daftar Materi'),
-            trailing: Icon(Icons.navigate_next),
-            iconColor: Colors.teal,
-            textColor: Colors.teal,
-          ),
-          ListTile(
-            onTap: () {
-              setState(() => _index = 3);
-              Get.back();
-            },
-            leading: Icon(Icons.people),
-            title: Text('Daftar Deadline'),
-            trailing: Icon(Icons.navigate_next),
-            iconColor: Colors.teal,
-            textColor: Colors.teal,
-          ),
-          ListTile(
-            onTap: () {
-              Get.back();
-              cAuth.logout();
-            },
-            leading: Icon(Icons.logout),
-            title: Text('Logout'),
-            trailing: Icon(Icons.navigate_next),
-            iconColor: Colors.teal,
-            textColor: Colors.teal,
-          ),
-        ],
+            ListTile(
+              onTap: () {
+                Get.back();
+                // Add logout logic here
+              },
+              leading: Icon(Icons.logout, color: Colors.redAccent),
+              title: Text(
+                'Logout',
+                style: TextStyle(color: Colors.white),
+              ),
+              trailing: Icon(Icons.navigate_next, color: Colors.redAccent),
+            ),
+          ],
+        ),
       ),
     );
   }
