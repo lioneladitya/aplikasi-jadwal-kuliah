@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import '../controllers/home_controller.dart';
 import 'package:myapp/app/modules/mahasiswa/views/mahasiswa_add_view.dart';
 import 'package:myapp/app/modules/mahasiswa/views/mahasiswa_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeView extends StatelessWidget {
   @override
@@ -110,7 +111,10 @@ class _DashboardAdminState extends State<DashboardAdmin> {
             DrawerHeader(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Colors.lightBlue.shade900, Colors.lightBlue.shade700],
+                  colors: [
+                    Colors.lightBlue.shade900,
+                    Colors.lightBlue.shade700
+                  ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -174,8 +178,7 @@ class _DashboardAdminState extends State<DashboardAdmin> {
             Divider(color: Colors.white54),
             ListTile(
               onTap: () {
-                Get.back();
-                // Tambahkan logika logout di sini
+                logout(context); // Panggil fungsi logout
               },
               leading: Icon(Icons.logout, color: Colors.redAccent),
               title: Text(
@@ -188,5 +191,16 @@ class _DashboardAdminState extends State<DashboardAdmin> {
         ),
       ),
     );
+  }
+
+  // Fungsi logout
+  void logout(BuildContext context) async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      Navigator.pushReplacementNamed(
+          context, '/login'); // Arahkan ke halaman login
+    } catch (e) {
+      print("Logout error: $e");
+    }
   }
 }

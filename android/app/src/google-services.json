@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1071445053104",
+    "project_id": "if-22adion",
+    "storage_bucket": "if-22adion.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1071445053104:android:b47a8108453f451937b575",
+        "android_client_info": {
+          "package_name": "com.example.mya"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1071445053104-rikr3s08evcr9iigsb1hqumafa0h7n7q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD0B7Tal7E4me1RoUwcN2UbEIJsFikhXpA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1071445053104-rikr3s08evcr9iigsb1hqumafa0h7n7q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
