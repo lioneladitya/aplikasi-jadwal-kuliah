@@ -30,17 +30,22 @@ class MahasiswaView extends StatelessWidget {
             itemCount: documents.length,
             itemBuilder: (context, index) {
               var doc = documents[index];
-              var mataKuliah = doc['mata_kuliah'];
-              var hari = doc['hari'];
-              var tugas = doc['tugas'] ?? '';
-              var materi = doc['materi'] ?? '';
-              var deadline = doc['deadline'] ?? '';
+              var data = doc.data() as Map<String, dynamic>;
+
+              // Validasi keberadaan field sebelum mengaksesnya
+              var mataKuliah = data['mata_kuliah'] ?? 'Tidak ada mata kuliah';
+              var hari = data['hari'] ?? 'Tidak ada hari';
+              var tugas = data['tugas'] ?? 'Tidak ada tugas';
+              var materi = data['materi'] ?? 'Tidak ada materi';
+              var deadline = data['deadline'] ?? 'Tidak ada deadline';
 
               return Card(
                 margin: EdgeInsets.all(8.0),
                 child: ListTile(
                   title: Text('$mataKuliah - $hari'),
-                  subtitle: Text('Tugas: $tugas\nMateri: $materi\nDeadline: $deadline'),
+                  subtitle: Text(
+                    'Tugas: $tugas\nMateri: $materi\nDeadline: $deadline',
+                  ),
                   onTap: () {
                     // Navigasi ke halaman edit
                     Navigator.push(

@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-import 'package:myapp/app/controllers/auth_controller.dart';
+import '../controllers/home_controller.dart';
 import 'package:myapp/app/modules/mahasiswa/views/mahasiswa_add_view.dart';
 import 'package:myapp/app/modules/mahasiswa/views/mahasiswa_view.dart';
-
-import '../controllers/home_controller.dart';
 
 class HomeView extends StatelessWidget {
   @override
@@ -23,26 +19,30 @@ class DashboardAdmin extends StatefulWidget {
 }
 
 class _DashboardAdminState extends State<DashboardAdmin> {
-  final List<Map> _fragment = [
+  final List<Map<String, dynamic>> _fragment = [
     {
       'title': 'Mata Kuliah',
-      'view': (context) => MahasiswaView(type: 'mata_kuliah'), // Replace with your MahasiswaView
-      'add': () => MahasiswaAddView(type: 'mata_kuliah'), // Replace with your MahasiswaAddView
+      'view': (BuildContext context) => MahasiswaView(type: 'mata_kuliah'),
+      'add': () => MahasiswaAddView(type: 'mata_kuliah'),
+      'icon': Icons.school,
     },
     {
       'title': 'Daftar Tugas',
-      'view': (context) => MahasiswaView(type: 'tugas'), // Replace with your MahasiswaView
-      'add': () => MahasiswaAddView(type: 'tugas'), // Replace with your MahasiswaAddView
+      'view': (BuildContext context) => MahasiswaView(type: 'tugas'),
+      'add': () => MahasiswaAddView(type: 'tugas'),
+      'icon': Icons.task,
     },
     {
       'title': 'Pencatatan Materi',
-      'view': (context) => MahasiswaView(type: 'materi'), // Replace with your MahasiswaView
-      'add': () => MahasiswaAddView(type: 'materi'), // Replace with your MahasiswaAddView
+      'view': (BuildContext context) => MahasiswaView(type: 'materi'),
+      'add': () => MahasiswaAddView(type: 'materi'),
+      'icon': Icons.note_alt,
     },
     {
       'title': 'Daftar Deadline',
-      'view': (context) => MahasiswaView(type: 'deadline'), // Replace with your MahasiswaView
-      'add': () => MahasiswaAddView(type: 'deadline'), // Replace with your MahasiswaAddView
+      'view': (BuildContext context) => MahasiswaView(type: 'deadline'),
+      'add': () => MahasiswaAddView(type: 'deadline'),
+      'icon': Icons.calendar_today,
     },
   ];
 
@@ -54,7 +54,7 @@ class _DashboardAdminState extends State<DashboardAdmin> {
       drawer: _buildDrawer(),
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.teal.shade700,
+        backgroundColor: Colors.lightBlue.shade700,
         title: Text(
           _fragment[_index]['title'],
           style: TextStyle(fontWeight: FontWeight.w600),
@@ -62,7 +62,10 @@ class _DashboardAdminState extends State<DashboardAdmin> {
         actions: [
           IconButton(
             tooltip: "Add New",
-            onPressed: () => Get.to(_fragment[_index]['add']()),
+            onPressed: () {
+              Widget? addView = _fragment[_index]['add']();
+              if (addView != null) Get.to(addView);
+            },
             icon: Icon(Icons.add_circle, size: 28),
           ),
         ],
@@ -70,14 +73,23 @@ class _DashboardAdminState extends State<DashboardAdmin> {
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.teal.shade100, Colors.teal.shade50],
+            colors: [Colors.lightBlue.shade100, Colors.lightBlue.shade50],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: _fragment[_index]['view'](context),
+          child: Card(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: _fragment[_index]['view'](context),
+            ),
+          ),
         ),
       ),
     );
@@ -88,17 +100,17 @@ class _DashboardAdminState extends State<DashboardAdmin> {
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.teal.shade700, Colors.teal.shade400],
+            colors: [Colors.lightBlue.shade700, Colors.lightBlue.shade400],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
         ),
-        child: ListView(
+        child: Column(
           children: [
             DrawerHeader(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Colors.teal.shade900, Colors.teal.shade700],
+                  colors: [Colors.lightBlue.shade900, Colors.lightBlue.shade700],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -108,7 +120,7 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                 children: [
                   CircleAvatar(
                     radius: 40,
-                    backgroundColor: Colors.teal.shade300,
+                    backgroundColor: Colors.lightBlue.shade300,
                     child: Icon(
                       Icons.account_circle,
                       size: 50,
@@ -121,7 +133,7 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Geels No Counter", 
+                        "Geels No Counter",
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -138,30 +150,37 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                 ],
               ),
             ),
-            ...List.generate(
-              _fragment.length,
-              (i) => ListTile(
-                onTap: () {
-                  setState(() => _index = i);
-                  Get.back();
+            Expanded(
+              child: ListView.builder(
+                itemCount: _fragment.length,
+                itemBuilder: (context, i) {
+                  return ListTile(
+                    onTap: () {
+                      setState(() {
+                        _index = i;
+                      });
+                      Get.back();
+                    },
+                    leading: Icon(_fragment[i]['icon'], color: Colors.white),
+                    title: Text(
+                      _fragment[i]['title'],
+                      style: TextStyle(color: Colors.white, fontSize: 16),
+                    ),
+                    trailing: Icon(Icons.navigate_next, color: Colors.white),
+                  );
                 },
-                leading: Icon(Icons.dashboard, color: Colors.white),
-                title: Text(
-                  _fragment[i]['title'],
-                  style: TextStyle(color: Colors.white),
-                ),
-                trailing: Icon(Icons.navigate_next, color: Colors.white),
               ),
             ),
+            Divider(color: Colors.white54),
             ListTile(
               onTap: () {
                 Get.back();
-                // Add logout logic here
+                // Tambahkan logika logout di sini
               },
               leading: Icon(Icons.logout, color: Colors.redAccent),
               title: Text(
                 'Logout',
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.redAccent, fontSize: 16),
               ),
               trailing: Icon(Icons.navigate_next, color: Colors.redAccent),
             ),

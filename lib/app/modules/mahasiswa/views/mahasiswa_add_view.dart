@@ -14,9 +14,12 @@ class MahasiswaAddView extends StatefulWidget {
 class _MahasiswaAddViewState extends State<MahasiswaAddView> {
   final TextEditingController _mataKuliahController = TextEditingController();
   final TextEditingController _hariController = TextEditingController();
-  final TextEditingController _tugasController = TextEditingController(); // Tugas
-  final TextEditingController _materiController = TextEditingController(); // Materi
-  final TextEditingController _deadlineController = TextEditingController(); // Deadline
+  final TextEditingController _tugasController =
+      TextEditingController(); // Tugas
+  final TextEditingController _materiController =
+      TextEditingController(); // Materi
+  final TextEditingController _deadlineController =
+      TextEditingController(); // Deadline
 
   @override
   void initState() {
@@ -27,14 +30,28 @@ class _MahasiswaAddViewState extends State<MahasiswaAddView> {
   }
 
   Future<void> _loadExistingData(String docId) async {
-    var doc = await FirebaseFirestore.instance.collection(widget.type).doc(docId).get();
-    if (doc.exists) {
-      var data = doc.data()!;
-      _mataKuliahController.text = data['mata_kuliah'] ?? '';
-      _hariController.text = data['hari'] ?? '';
-      _tugasController.text = data['tugas'] ?? ''; // Menambah tugas
-      _materiController.text = data['materi'] ?? ''; // Menambah materi
-      _deadlineController.text = data['deadline'] ?? ''; // Menambah deadline
+    try {
+      var doc = await FirebaseFirestore.instance
+          .collection(widget.type) // Gunakan widget.type untuk koleksi
+          .doc(docId)
+          .get();
+      if (doc.exists) {
+        setState(() {
+          var data = doc.data()!;
+          _mataKuliahController.text = data['mata_kuliah'] ?? ''; // Validasi
+          _hariController.text = data['hari'] ?? ''; // Validasi
+          _tugasController.text =
+              data.containsKey('tugas') ? data['tugas'] : '';
+          _materiController.text =
+              data.containsKey('materi') ? data['materi'] : '';
+          _deadlineController.text =
+              data.containsKey('deadline') ? data['deadline'] : '';
+        });
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal memuat data: $e')),
+      );
     }
   }
 
@@ -42,7 +59,9 @@ class _MahasiswaAddViewState extends State<MahasiswaAddView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.docId == null ? 'Tambah ${widget.type}' : 'Edit ${widget.type}'),
+        title: Text(widget.docId == null
+            ? 'Tambah ${widget.type}'
+            : 'Edit ${widget.type}'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -69,7 +88,9 @@ class _MahasiswaAddViewState extends State<MahasiswaAddView> {
             SizedBox(height: 10),
 
             // Kondisional untuk menambahkan input field berdasarkan jenis data
-            if (widget.type == 'daftar_tugas' || widget.type == 'daftar_materi' || widget.type == 'daftar_deadline') ...[
+            if (widget.type == 'daftar_tugas' ||
+                widget.type == 'daftar_materi' ||
+                widget.type == 'daftar_deadline') ...[
               // Input field untuk tugas
               TextField(
                 controller: _tugasController,
@@ -80,7 +101,8 @@ class _MahasiswaAddViewState extends State<MahasiswaAddView> {
               ),
               SizedBox(height: 10),
             ],
-            if (widget.type == 'daftar_materi' || widget.type == 'daftar_deadline') ...[
+            if (widget.type == 'daftar_materi' ||
+                widget.type == 'daftar_deadline') ...[
               // Input field untuk materi
               TextField(
                 controller: _materiController,
@@ -104,53 +126,32 @@ class _MahasiswaAddViewState extends State<MahasiswaAddView> {
             ],
 
             ElevatedButton(
-              onPressed: () async {
-                if (_mataKuliahController.text.isNotEmpty && _hariController.text.isNotEmpty) {
-                  if (widget.type == 'daftar_tugas' && _tugasController.text.isNotEmpty) {
-                    await _addData(
-                        widget.type,
-                        _mataKuliahController.text,
-                        _hariController.text,
-                        _tugasController.text,
-                        '',
-                        '');
-                  } else if (widget.type == 'daftar_materi' && _materiController.text.isNotEmpty) {
-                    await _addData(
-                        widget.type,
-                        _mataKuliahController.text,
-                        _hariController.text,
-                        '',
-                        _materiController.text,
-                        '');
-                  } else if (widget.type == 'daftar_deadline' && _deadlineController.text.isNotEmpty) {
-                    await _addData(
-                        widget.type,
-                        _mataKuliahController.text,
-                        _hariController.text,
-                        '',
-                        '',
-                        _deadlineController.text);
-                  } else {
-                    await _addData(
-                        widget.type,
-                        _mataKuliahController.text,
-                        _hariController.text,
-                        '',
-                        '',
-                        '');
-                  }
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('${widget.type} berhasil ditambahkan')),
-                  );
-                  Navigator.pop(context);
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Harap isi semua data')),
-                  );
-                }
-              },
-              child: Text(widget.docId == null ? 'Simpan ${widget.type}' : 'Perbarui ${widget.type}'),
-            ),
+  onPressed: () async {
+    if (_mataKuliahController.text.isNotEmpty &&
+        _hariController.text.isNotEmpty) {
+      await _addData(
+        widget.type,
+        _mataKuliahController.text,
+        _hariController.text,
+        _tugasController.text,
+        _materiController.text,
+        _deadlineController.text,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${widget.type} berhasil ditambahkan')),
+      );
+      Navigator.pop(context);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Harap isi semua data')),
+      );
+    }
+  },
+  child: Text(widget.docId == null
+      ? 'Simpan ${widget.type}'
+      : 'Perbarui ${widget.type}'),
+),
+
           ],
         ),
       ),
@@ -158,15 +159,22 @@ class _MahasiswaAddViewState extends State<MahasiswaAddView> {
   }
 
   // Fungsi untuk menambahkan data ke Firestore
-  Future<void> _addData(String type, String mataKuliah, String hari, String tugas, String materi, String deadline) async {
-    final collection = FirebaseFirestore.instance.collection(type);
-    await collection.add({
-      'mata_kuliah': mataKuliah,
-      'hari': hari,
-      'tugas': tugas,
-      'materi': materi,
-      'deadline': deadline,
-      'createdAt': Timestamp.now(),
-    });
+  Future<void> _addData(String type, String mataKuliah, String hari,
+      String tugas, String materi, String deadline) async {
+    try {
+      final collection = FirebaseFirestore.instance.collection(type);
+      await collection.add({
+        'mata_kuliah': mataKuliah,
+        'hari': hari,
+        'tugas': tugas.isNotEmpty ? tugas : '', // Default jika kosong
+        'materi': materi.isNotEmpty ? materi : '', // Default jika kosong
+        'deadline': deadline.isNotEmpty ? deadline : '', // Default jika kosong
+        'createdAt': Timestamp.now(),
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal menyimpan data: $e')),
+      );
+    }
   }
 }
