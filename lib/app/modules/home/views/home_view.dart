@@ -125,10 +125,8 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                   CircleAvatar(
                     radius: 40,
                     backgroundColor: Colors.lightBlue.shade300,
-                    child: Icon(
-                      Icons.account_circle,
-                      size: 50,
-                      color: Colors.white,
+                    child: Image.asset(
+                      'assets/images/profile.png'
                     ),
                   ),
                   SizedBox(width: 16),
