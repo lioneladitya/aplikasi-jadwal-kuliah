@@ -187,6 +187,12 @@ class _DashboardAdminState extends State<DashboardAdmin> {
               ),
               trailing: Icon(Icons.navigate_next, color: Colors.redAccent),
             ),
+            ListTile(
+              title: Text(
+                "Version 1.0",
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+            )
           ],
         ),
       ),
