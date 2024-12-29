@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'package:myapp/app/controllers/auth_controller.dart';
-
+import 'package:firebase_auth/firebase_auth.dart'; // Tambahkan Firebase Auth
 import '../controllers/signup_controller.dart';
 
 class SignupView extends GetView<SignupController> {
-  final cAuth = Get.find<AuthController>();
+  final FirebaseAuth _auth = FirebaseAuth.instance; // Firebase Auth instance
 
   @override
   Widget build(BuildContext context) {
-    //agar rensponsive -- soon
-    // double screenWidth = MediaQuery.of(context).size.width;
-    // double screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       body: Container(
         width: 390,
@@ -22,15 +16,6 @@ class SignupView extends GetView<SignupController> {
         decoration: BoxDecoration(color: Colors.white),
         child: Stack(
           children: [
-            Positioned(
-              left: 0,
-              top: 808.13,
-              child: Container(
-                width: 390,
-                height: 35.87,
-                child: Stack(),
-              ),
-            ),
             Positioned(
               left: 153,
               top: 223.66,
@@ -89,47 +74,24 @@ class SignupView extends GetView<SignupController> {
               child: Container(
                 width: 328,
                 height: 64,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 0,
-                      top: 0,
-                      child: Container(
-                        width: 328,
-                        height: 64,
-                        decoration: ShapeDecoration(
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            side:
-                                BorderSide(width: 1, color: Color(0xFF5090F3)),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          shadows: [
-                            BoxShadow(
-                              color: Color(0x19000000),
-                              blurRadius: 10,
-                              offset: Offset(0, 0),
-                              spreadRadius: 0,
-                            )
-                          ],
-                        ),
-                      ),
+                child: TextField(
+                  controller: controller.cEmail,
+                  decoration: InputDecoration(
+                    hintText: 'Email',
+                    hintStyle: TextStyle(
+                      color: Color(0xFF181818),
+                      fontSize: 14,
+                      fontFamily: 'Nunito',
                     ),
-                    Positioned(
-                      left: 27,
-                      top: 22,
-                      child: Text(
-                        'Username',
-                        style: TextStyle(
-                          color: Color(0xFF181818),
-                          fontSize: 14,
-                          fontFamily: 'Nunito',
-                          fontWeight: FontWeight.w400,
-                          height: 0,
-                        ),
-                      ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xFF5090F3)),
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                  ],
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xFF5090F3)),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -139,177 +101,91 @@ class SignupView extends GetView<SignupController> {
               child: Container(
                 width: 328,
                 height: 64,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 0,
-                      top: 0,
-                      child: Container(
-                        width: 328,
-                        height: 64,
-                        decoration: ShapeDecoration(
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            side:
-                                BorderSide(width: 1, color: Color(0xFF5090F3)),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          shadows: [
-                            BoxShadow(
-                              color: Color(0x19000000),
-                              blurRadius: 10,
-                              offset: Offset(0, 0),
-                              spreadRadius: 0,
-                            )
-                          ],
-                        ),
-                      ),
+                child: TextField(
+                  controller: controller.cPass,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    hintText: 'Password',
+                    hintStyle: TextStyle(
+                      color: Color(0xFF181818),
+                      fontSize: 14,
+                      fontFamily: 'Nunito',
                     ),
-                    Positioned(
-                      left: 24,
-                      top: 23,
-                      child: Text(
-                        'Password',
-                        style: TextStyle(
-                          color: Color(0xFF181818),
-                          fontSize: 14,
-                          fontFamily: 'Nunito',
-                          fontWeight: FontWeight.w400,
-                          height: 0,
-                        ),
-                      ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xFF5090F3)),
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    Positioned(
-                      left: 280,
-                      top: 21,
-                      child: Container(
-                        width: 24,
-                        height: 24,
-                        decoration: BoxDecoration(),
-                        child: Image.asset(
-                          'assets/images/removeye.png',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xFF5090F3)),
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              left: 31,
-              top: 466,
-              child: Container(
-                width: 328,
-                height: 64,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 0,
-                      top: 0,
-                      child: Container(
-                        width: 328,
-                        height: 64,
-                        decoration: ShapeDecoration(
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            side:
-                                BorderSide(width: 1, color: Color(0xFF5090F3)),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          shadows: [
-                            BoxShadow(
-                              color: Color(0x19000000),
-                              blurRadius: 10,
-                              offset: Offset(0, 0),
-                              spreadRadius: 0,
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      left: 24,
-                      top: 23,
-                      child: Text(
-                        'Confirm password',
-                        style: TextStyle(
-                          color: Color(0xFF181818),
-                          fontSize: 14,
-                          fontFamily: 'Nunito',
-                          fontWeight: FontWeight.w400,
-                          height: 0,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      left: 280,
-                      top: 21,
-                      child: Container(
-                        width: 24,
-                        height: 24,
-                        decoration: BoxDecoration(),
-                        child: Image.asset(
-                          'assets/images/removeye.png',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
             Positioned(
               left: 31,
               top: 577,
-              child: Container(
-                width: 328,
-                height: 52,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 0,
-                      top: 0,
-                      child: Container(
-                        width: 328,
-                        height: 52,
-                        decoration: ShapeDecoration(
-                          color: Color(0xFF5090F3),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
+              child: GestureDetector(
+                onTap: () async {
+                  String email = controller.cEmail.text.trim();
+                  String password = controller.cPass.text.trim();
+
+                  if (email.isEmpty || password.isEmpty) {
+                    Get.snackbar(
+                      'Error',
+                      'Email and Password cannot be empty.',
+                      snackPosition: SnackPosition.BOTTOM,
+                    );
+                    return;
+                  }
+
+                  try {
+                    // Register user
+                    UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+                      email: email,
+                      password: password,
+                    );
+
+                    // Send email verification
+                    if (userCredential.user != null && !userCredential.user!.emailVerified) {
+                      await userCredential.user!.sendEmailVerification();
+                      Get.snackbar(
+                        'Success',
+                        'Registration successful! Please check your email for verification.',
+                        snackPosition: SnackPosition.BOTTOM,
+                      );
+                    }
+                  } catch (e) {
+                    Get.snackbar(
+                      'Registration Error',
+                      e.toString(),
+                      snackPosition: SnackPosition.BOTTOM,
+                    );
+                  }
+                },
+                child: Container(
+                  width: 328,
+                  height: 52,
+                  decoration: ShapeDecoration(
+                    color: Color(0xFF5090F3),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Register',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontFamily: 'Nunito',
+                        fontWeight: FontWeight.w600,
+                        height: 0,
                       ),
                     ),
-                    Positioned(
-                      left: 134,
-                      top: 15,
-                      child: Text(
-                        'Register',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontFamily: 'Nunito',
-                          fontWeight: FontWeight.w600,
-                          height: 0,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Positioned(
-              left: 195,
-              top: 650,
-              child: Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(),
-                child: Image.asset(
-                  'assets/images/arrback.png',
-                  fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),

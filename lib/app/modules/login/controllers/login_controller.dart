@@ -11,4 +11,5 @@ class LoginController extends GetxController {
     cPass.dispose();
     super.onClose();
   }
+
 }

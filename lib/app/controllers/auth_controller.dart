@@ -99,4 +99,5 @@ class AuthController extends GetxController {
     }
   }
 
+  void register(String text, String text2) {}
 }
