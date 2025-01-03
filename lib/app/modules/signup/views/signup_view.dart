@@ -45,7 +45,7 @@ class SignupView extends GetView<SignupController> {
               ),
               const SizedBox(height: 10),
               Text(
-                "and save your schedule neatly.",
+                "simpanlah jadwal anda dengan rapih",
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.white70,
