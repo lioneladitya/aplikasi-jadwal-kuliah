@@ -97,105 +97,108 @@ class _DashboardAdminState extends State<DashboardAdmin> {
   }
 
   Widget _buildDrawer() {
-    return Drawer(
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.lightBlue.shade700, Colors.lightBlue.shade400],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: Column(
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.lightBlue.shade900,
-                    Colors.lightBlue.shade700
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: 40,
-                    backgroundColor: Colors.lightBlue.shade300,
-                    child: Image.asset(
-                      'assets/images/profile.png'
-                    ),
-                  ),
-                  SizedBox(width: 16),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Geels No Counter",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        'Admin',
-                        style: TextStyle(fontSize: 14, color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: _fragment.length,
-                itemBuilder: (context, i) {
-                  return ListTile(
-                    onTap: () {
-                      setState(() {
-                        _index = i;
-                      });
-                      Get.back();
-                    },
-                    leading: Icon(_fragment[i]['icon'], color: Colors.white),
-                    title: Text(
-                      _fragment[i]['title'],
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                    trailing: Icon(Icons.navigate_next, color: Colors.white),
-                  );
-                },
-              ),
-            ),
-            Divider(color: Colors.white54),
-            ListTile(
-              onTap: () {
-                logout(context); // Panggil fungsi logout
-              },
-              leading: Icon(Icons.logout, color: Colors.redAccent),
-              title: Text(
-                'Logout',
-                style: TextStyle(color: Colors.redAccent, fontSize: 16),
-              ),
-              trailing: Icon(Icons.navigate_next, color: Colors.redAccent),
-            ),
-            ListTile(
-              title: Text(
-                "Version 1.0",
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-            )
-          ],
+  return Drawer(
+    child: Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.lightBlue.shade700, Colors.lightBlue.shade400],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
       ),
-    );
-  }
+      child: Column(
+        children: [
+          DrawerHeader(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.lightBlue.shade900, Colors.lightBlue.shade700],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CircleAvatar(
+                  radius: 40,
+                  backgroundColor: Colors.lightBlue.shade300,
+                  child: Text(
+                    "GN",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                SizedBox(width: 16),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Geels No Counter",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      'Welcome!',
+                      style: TextStyle(fontSize: 14, color: Colors.white70),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: _fragment.length,
+              itemBuilder: (context, i) {
+                return ListTile(
+                  onTap: () {
+                    setState(() {
+                      _index = i;
+                    });
+                    Get.back();
+                  },
+                  leading: Icon(_fragment[i]['icon'], color: Colors.white),
+                  title: Text(
+                    _fragment[i]['title'],
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                  trailing: Icon(Icons.navigate_next, color: Colors.white),
+                );
+              },
+            ),
+          ),
+          Divider(color: Colors.white54),
+          ListTile(
+            onTap: () {
+              logout(context); // Panggil fungsi logout
+            },
+            leading: Icon(Icons.logout, color: Colors.redAccent),
+            title: Text(
+              'Logout',
+              style: TextStyle(color: Colors.redAccent, fontSize: 16),
+            ),
+            trailing: Icon(Icons.navigate_next, color: Colors.redAccent),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 8.0, bottom: 16.0),
+            child: Text(
+              "Version 1.0",
+              style: TextStyle(color: Colors.white70, fontSize: 12),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
 
   // Fungsi logout
   void logout(BuildContext context) async {
