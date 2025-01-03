@@ -60,16 +60,6 @@ class _DashboardAdminState extends State<DashboardAdmin> {
           _fragment[_index]['title'],
           style: TextStyle(fontWeight: FontWeight.w600),
         ),
-        actions: [
-          IconButton(
-            tooltip: "Add New",
-            onPressed: () {
-              Widget? addView = _fragment[_index]['add']();
-              if (addView != null) Get.to(addView);
-            },
-            icon: Icon(Icons.add_circle, size: 28),
-          ),
-        ],
       ),
       body: Container(
         decoration: BoxDecoration(
