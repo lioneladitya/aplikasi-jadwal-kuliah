@@ -28,14 +28,10 @@ class LoginView extends GetView<LoginController> {
               children: [
                 const SizedBox(height: 60),
                 // Logo Aplikasi
-                CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Colors.white,
-                  child: Icon(
-                    Icons.school,
-                    color: Colors.blue.shade700,
-                    size: 50,
-                  ),
+                Image.asset(
+                  "assets/images/sc_logo.png",
+                  height: 120,
+                  width: 120,
                 ),
                 const SizedBox(height: 20),
                 Text(
