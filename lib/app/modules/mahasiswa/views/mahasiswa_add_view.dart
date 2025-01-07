@@ -14,9 +14,6 @@ class MahasiswaAddView extends StatefulWidget {
 class _MahasiswaAddViewState extends State<MahasiswaAddView> {
   final TextEditingController _mataKuliahController = TextEditingController();
   final TextEditingController _hariController = TextEditingController();
-  final TextEditingController _tugasController = TextEditingController();
-  final TextEditingController _materiController = TextEditingController();
-  final TextEditingController _deadlineController = TextEditingController();
 
   @override
   void initState() {
@@ -37,9 +34,6 @@ class _MahasiswaAddViewState extends State<MahasiswaAddView> {
           var data = doc.data()!;
           _mataKuliahController.text = data['mata_kuliah'] ?? '';
           _hariController.text = data['hari'] ?? '';
-          _tugasController.text = data['tugas'] ?? '';
-          _materiController.text = data['materi'] ?? '';
-          _deadlineController.text = data['deadline'] ?? '';
         });
       }
     } catch (e) {
@@ -85,39 +79,7 @@ class _MahasiswaAddViewState extends State<MahasiswaAddView> {
                   prefixIcon: Icon(Icons.calendar_today),
                 ),
               ),
-              SizedBox(height: 15),
-              TextField(
-                controller: _tugasController,
-                decoration: InputDecoration(
-                  labelText: 'Masukkan Tugas',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  prefixIcon: Icon(Icons.assignment),
-                ),
-              ),
-              SizedBox(height: 15),
-              TextField(
-                controller: _materiController,
-                decoration: InputDecoration(
-                  labelText: 'Masukkan Materi',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  prefixIcon: Icon(Icons.menu_book),
-                ),
-              ),
-              SizedBox(height: 15),
-              TextField(
-                controller: _deadlineController,
-                decoration: InputDecoration(
-                  labelText: 'Masukkan Deadline',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  prefixIcon: Icon(Icons.access_time),
-                ),
-              ),
+            
               SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -133,10 +95,7 @@ class _MahasiswaAddViewState extends State<MahasiswaAddView> {
                     await _addData(
                       widget.type,
                       _mataKuliahController.text,
-                      _hariController.text,
-                      _tugasController.text,
-                      _materiController.text,
-                      _deadlineController.text,
+                      _hariController.text
                     );
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('${widget.type} berhasil ditambahkan')),
@@ -164,16 +123,12 @@ class _MahasiswaAddViewState extends State<MahasiswaAddView> {
     );
   }
 
-  Future<void> _addData(String type, String mataKuliah, String hari,
-      String tugas, String materi, String deadline) async {
+  Future<void> _addData(String type, String mataKuliah, String hari) async {
     try {
       final collection = FirebaseFirestore.instance.collection(type);
       await collection.add({
         'mata_kuliah': mataKuliah,
         'hari': hari,
-        'tugas': tugas.isNotEmpty ? tugas : '',
-        'materi': materi.isNotEmpty ? materi : '',
-        'deadline': deadline.isNotEmpty ? deadline : '',
         'createdAt': Timestamp.now(),
       });
     } catch (e) {
