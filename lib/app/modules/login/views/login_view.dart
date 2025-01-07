@@ -60,7 +60,7 @@ class LoginView extends GetView<LoginController> {
                     fillColor: Colors.white,
                     hintText: "Email",
                     hintStyle: TextStyle(color: Colors.grey.shade700),
-                    prefixIcon: Icon(Icons.email, color: Colors.grey.shade700),
+                    prefixIcon: Icon(Icons.email, color: Colors.blue),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
                       borderSide: BorderSide.none,
@@ -77,7 +77,7 @@ class LoginView extends GetView<LoginController> {
                     fillColor: Colors.white,
                     hintText: "Password",
                     hintStyle: TextStyle(color: Colors.grey.shade700),
-                    prefixIcon: Icon(Icons.lock, color: Colors.grey.shade700),
+                    prefixIcon: Icon(Icons.lock, color: Colors.blue),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
                       borderSide: BorderSide.none,
